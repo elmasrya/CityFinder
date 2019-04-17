@@ -21,17 +21,8 @@ import java.util.ArrayList;
  * This is the list adapter for the City Recycler View
  */
 public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyViewHolder> {
-    private static final String TAG = "CityListAdapter";
-    private ArrayList<City> cityArrayList;
     Context context;
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout cityListItemLayout;
-        public MyViewHolder(RelativeLayout cityListItemLayout) {
-            super(cityListItemLayout);
-            this.cityListItemLayout = cityListItemLayout;
-        }
-    }
+    private ArrayList<City> cityArrayList;
 
     public CityListAdapter(ArrayList cityArrayList, Context context) {
         this.cityArrayList = cityArrayList;
@@ -56,7 +47,8 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyView
         holder.cityListItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + city.getLatitude() + "," + city.getLongitude()));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:"
+                    + city.getLatitude() + "," + city.getLongitude()));
                 context.startActivity(intent);
             }
         });
@@ -65,5 +57,14 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyView
     @Override
     public int getItemCount() {
         return cityArrayList.size();
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout cityListItemLayout;
+
+        public MyViewHolder(RelativeLayout cityListItemLayout) {
+            super(cityListItemLayout);
+            this.cityListItemLayout = cityListItemLayout;
+        }
     }
 }
