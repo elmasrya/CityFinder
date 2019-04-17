@@ -5,8 +5,8 @@ import org.json.JSONObject;
 
 public class City {
 
-    String city, county;
-    int id, latitude, longitude;
+    String city, county, longitude, latitude;;
+    int id;
 
     public City () {
     }
@@ -16,8 +16,8 @@ public class City {
             city = cityObject.getString("name");
             county = cityObject.getString("country");
             id = cityObject.getInt("_id");
-            longitude = cityObject.getJSONObject("coord").getInt("lon");
-            latitude = cityObject.getJSONObject("coord").getInt("lat");
+            latitude = cityObject.getJSONObject("coord").getString("lat");
+            longitude = cityObject.getJSONObject("coord").getString("lon");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -39,19 +39,19 @@ public class City {
         this.county = county;
     }
 
-    public int getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public int getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 

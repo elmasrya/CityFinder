@@ -1,8 +1,11 @@
 package com.example.cityfinder.controllers;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
  * This is the list adapter for the City Recycler View
  */
 public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyViewHolder> {
+    private static final String TAG = "CityListAdapter";
     private ArrayList<City> cityArrayList;
     Context context;
 
@@ -47,8 +51,15 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         TextView tvCity = (TextView) holder.cityListItemLayout.getChildAt(0);
-        City city = cityArrayList.get(position);
+        final City city = cityArrayList.get(position);
         tvCity.setText(city.getCity() + ", " + city.getCounty());
+        holder.cityListItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + city.getLatitude() + "," + city.getLongitude()));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
