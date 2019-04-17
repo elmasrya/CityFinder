@@ -3,18 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <EditText
         android:id="@+id/ed_search_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/search_icon_drawable"
+        android:drawableStart="@drawable/search_icon_drawable"
         android:hint="@string/search_city"/>
 
     <TextView
         android:id="@+id/tv_city_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:textSize="25sp"
         android:text="@string/city_header"/>
 
     <android.support.v7.widget.RecyclerView
