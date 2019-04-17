@@ -1,8 +1,10 @@
 package com.example.cityfinder.views;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cityfinder.R;
+import com.example.cityfinder.controllers.CityListAdapter;
 import com.example.cityfinder.models.City;
 
 import org.json.JSONArray;
@@ -27,12 +30,15 @@ public class CityFinderActivity extends AppCompatActivity {
     TextView tvCityHeader, tvLoadingMessage;
     EditText edSearchCity;
     RecyclerView rvDisplayCity;
+    CityListAdapter cityListAdapter;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        activity = this;
         pbLoadingCities = findViewById(R.id.pb_loading_cities);
         tvLoadingMessage = findViewById(R.id.tv_loading_message);
         edSearchCity = findViewById(R.id.ed_search_city);
@@ -53,20 +59,24 @@ public class CityFinderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<City> cityArrayList) {
             super.onPostExecute(cityArrayList);
+
             edSearchCity.setVisibility(View.VISIBLE);
             tvCityHeader.setVisibility(View.VISIBLE);
             rvDisplayCity.setVisibility(View.VISIBLE);
             pbLoadingCities.setVisibility(View.GONE);
             tvLoadingMessage.setVisibility(View.GONE);
+            cityListAdapter = new CityListAdapter(cityArrayList, activity);
+            rvDisplayCity.setAdapter(cityListAdapter);
+            rvDisplayCity.setLayoutManager(new LinearLayoutManager(activity));
         }
 
         @Override
         protected ArrayList<City> doInBackground(Integer... integers) {
-            return getCityListFromJSON();
+            return createList();
         }
     }
 
-    public ArrayList<City> getCityListFromJSON () {
+    public void getCityListFromJSON () {
         try {
             JSONArray array = new JSONArray(readJSONFromAsset());
             cityArrayList = new ArrayList<City>();
@@ -80,8 +90,6 @@ public class CityFinderActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return cityArrayList;
     }
 
     public String readJSONFromAsset() {
@@ -100,7 +108,6 @@ public class CityFinderActivity extends AppCompatActivity {
         return json;
     }
 
-    //TODO: Implement sorting the cities in alaphabetical orders
     public void sortCities() {
         Collections.sort(cityArrayList, new Comparator<City>() {
             @Override
@@ -110,9 +117,10 @@ public class CityFinderActivity extends AppCompatActivity {
         });
     }
 
-    //TODO: Implement creating list
-    public void createList() {
-
+    public ArrayList<City> createList() {
+        getCityListFromJSON();
+        sortCities();
+        return cityArrayList;
     }
 
 }

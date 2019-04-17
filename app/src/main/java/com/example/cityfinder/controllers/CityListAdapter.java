@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.cityfinder.R;
 import com.example.cityfinder.models.City;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
  *
  * This is the list adapter for the City Recycler View
  */
-//TODO: Implement city list adapter in Activity
 public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyViewHolder> {
     private ArrayList<City> cityArrayList;
     Context context;
@@ -29,7 +29,6 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyView
         }
     }
 
-    //TODO: Implement constructor in Activity
     public CityListAdapter(ArrayList cityArrayList, Context context) {
         this.cityArrayList = cityArrayList;
         this.context = context;
@@ -47,6 +46,9 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        TextView tvCity = (TextView) holder.cityListItemLayout.getChildAt(0);
+        City city = cityArrayList.get(position);
+        tvCity.setText(city.getCity() + ", " + city.getCounty());
     }
 
     @Override

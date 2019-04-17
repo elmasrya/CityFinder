@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">City Finder</string>
-    <string name="city_name">City Finder</string>
+    <string name="city_name">City Name Here</string>
     <string name="search_city">Search City</string>
     <string name="city_header">Cities: </string>
     <string name="city_loading_message">Please Wait...</string>
