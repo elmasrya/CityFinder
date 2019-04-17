@@ -1,9 +1,11 @@
-package com.example.cityfinder;
+package com.example.cityfinder.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class CityFinder extends AppCompatActivity {
+import com.example.cityfinder.R;
+
+public class CityFinderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
