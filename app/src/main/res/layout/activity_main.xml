@@ -6,6 +6,26 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <EditText
+        android:id="@+id/et_search_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/search_icon_drawable"
+        android:drawableLeft="@drawable/search_icon_drawable"
+        android:hint="@string/search_city"
+        android:enabled="false"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_city_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/city_header"
+        android:textSize="25sp"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/pb_loading_cities"
         android:layout_width="wrap_content"
@@ -20,25 +40,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/city_loading_message"/>
-
-    <EditText
-        android:id="@+id/ed_search_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/search_icon_drawable"
-        android:drawableLeft="@drawable/search_icon_drawable"
-        android:hint="@string/search_city"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/tv_city_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
-        android:text="@string/city_header"
-        android:textSize="25sp"
-        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_city_list"

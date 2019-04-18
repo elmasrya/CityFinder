@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -25,10 +27,10 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class CityFinderActivity extends AppCompatActivity {
-    ArrayList<City> cityArrayList;
+    ArrayList<City> fullCityArrayList, previousCityArrayList;
     ProgressBar pbLoadingCities;
     TextView tvCityHeader, tvLoadingMessage;
-    EditText edSearchCity;
+    EditText etSearchCity;
     RecyclerView rvDisplayCity;
     CityListAdapter cityListAdapter;
     Activity activity;
@@ -41,50 +43,84 @@ public class CityFinderActivity extends AppCompatActivity {
         activity = this;
         pbLoadingCities = findViewById(R.id.pb_loading_cities);
         tvLoadingMessage = findViewById(R.id.tv_loading_message);
-        edSearchCity = findViewById(R.id.ed_search_city);
+        etSearchCity = findViewById(R.id.et_search_city);
         tvCityHeader = findViewById(R.id.tv_city_header);
         rvDisplayCity = findViewById(R.id.rv_city_list);
 
         LoadCitiesAsyncTask task = new LoadCitiesAsyncTask();
-        task.execute(10);
+        task.execute();
+
+        etSearchCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!etSearchCity.getText().toString().isEmpty()) {
+                    ArrayList<City> newCityArrayList = new ArrayList<City>();
+
+                    for (City c : previousCityArrayList) {
+                        if (c.getCity().toLowerCase().startsWith(s.toString().toLowerCase())) {
+                            newCityArrayList.add(c);
+                        }
+                    }
+
+                    if (s.length() == 1) {
+                        previousCityArrayList = newCityArrayList;
+                    }
+
+                    createList(newCityArrayList);
+                } else {
+                    previousCityArrayList = fullCityArrayList;
+                    createList(fullCityArrayList);
+                }
+            }
+        });
     }
 
-    public class LoadCitiesAsyncTask extends AsyncTask<Integer, Integer, ArrayList<City> > {
+    public class LoadCitiesAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            initializeCityList();
+            return null;
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
-        @Override
-        protected void onPostExecute(ArrayList<City> cityArrayList) {
-            super.onPostExecute(cityArrayList);
 
-            edSearchCity.setVisibility(View.VISIBLE);
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            etSearchCity.setVisibility(View.VISIBLE);
+            etSearchCity.setEnabled(true);
             tvCityHeader.setVisibility(View.VISIBLE);
             rvDisplayCity.setVisibility(View.VISIBLE);
             pbLoadingCities.setVisibility(View.GONE);
             tvLoadingMessage.setVisibility(View.GONE);
-            cityListAdapter = new CityListAdapter(cityArrayList, activity);
-            rvDisplayCity.setAdapter(cityListAdapter);
-            rvDisplayCity.setLayoutManager(new LinearLayoutManager(activity));
-        }
-
-        @Override
-        protected ArrayList<City> doInBackground(Integer... integers) {
-            return createList();
+            previousCityArrayList = fullCityArrayList;
+            createList(fullCityArrayList);
         }
     }
 
     public void getCityListFromJSON () {
         try {
             JSONArray array = new JSONArray(readJSONFromAsset());
-            cityArrayList = new ArrayList<City>();
+            fullCityArrayList = new ArrayList<City>();
             City city = null;
 
             for (int i = 0; i < array.length(); i++) {
                 city = new City(array.getJSONObject(i));
-                cityArrayList.add(city);
+                fullCityArrayList.add(city);
             }
 
         } catch (JSONException e) {
@@ -108,8 +144,8 @@ public class CityFinderActivity extends AppCompatActivity {
         return json;
     }
 
-    public void sortCities() {
-        Collections.sort(cityArrayList, new Comparator<City>() {
+    public void sortCities(ArrayList<City> cityList) {
+        Collections.sort(cityList, new Comparator<City>() {
             @Override
             public int compare(final City object1, final City object2) {
                 return object1.getCity().compareTo(object2.getCity());
@@ -117,10 +153,15 @@ public class CityFinderActivity extends AppCompatActivity {
         });
     }
 
-    public ArrayList<City> createList() {
+    public void initializeCityList() {
         getCityListFromJSON();
-        sortCities();
-        return cityArrayList;
+        sortCities(fullCityArrayList);
     }
 
+    public void createList(ArrayList<City> cityList) {
+        cityListAdapter = new CityListAdapter(cityList, activity);
+        rvDisplayCity.setAdapter(cityListAdapter);
+        rvDisplayCity.setLayoutManager(new LinearLayoutManager(activity));
+        cityListAdapter.notifyDataSetChanged();
+    }
 }
