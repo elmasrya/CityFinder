@@ -49,4 +49,24 @@ public class UtilTest {
         // Test that the items have switched places alphabetically
         assertEquals("Atlanta", cities.get(0).getCity());
     }
+
+    @Test
+    public void sortCitiesIsEmpty() {
+        cities = new ArrayList<>();
+        util.sortCities(cities);
+        // Test if it is empty
+        assertTrue(cities.isEmpty());
+    }
+
+    @Test
+    public void sortCitiesHasData() {
+        City city1 = new City();
+        cities.add(city1);
+
+        // Execute sorting
+        util.sortCities(cities);
+
+        assertTrue(!cities.isEmpty());
+    }
+
 }
