@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.cityfinder.R;
+import com.example.cityfinder.Util;
 import com.example.cityfinder.controllers.CityListAdapter;
 import com.example.cityfinder.models.City;
 
@@ -34,6 +35,7 @@ public class CityFinderActivity extends AppCompatActivity {
     RecyclerView rvDisplayCity;
     CityListAdapter cityListAdapter;
     Activity activity;
+    Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class CityFinderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         activity = this;
+        util = new Util();
         pbLoadingCities = findViewById(R.id.pb_loading_cities);
         tvLoadingMessage = findViewById(R.id.tv_loading_message);
         etSearchCity = findViewById(R.id.et_search_city);
@@ -114,7 +117,7 @@ public class CityFinderActivity extends AppCompatActivity {
 
     public void getCityListFromJSON () {
         try {
-            JSONArray array = new JSONArray(readJSONFromAsset());
+            JSONArray array = new JSONArray(util.readJSONFromAsset(activity, "cities.json"));
             fullCityArrayList = new ArrayList<City>();
             City city = null;
 
@@ -128,34 +131,10 @@ public class CityFinderActivity extends AppCompatActivity {
         }
     }
 
-    public String readJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("cities.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    public void sortCities(ArrayList<City> cityList) {
-        Collections.sort(cityList, new Comparator<City>() {
-            @Override
-            public int compare(final City object1, final City object2) {
-                return object1.getCity().compareTo(object2.getCity());
-            }
-        });
-    }
 
     public void initializeCityList() {
         getCityListFromJSON();
-        sortCities(fullCityArrayList);
+        util.sortCities(fullCityArrayList);
     }
 
     public void createList(ArrayList<City> cityList) {

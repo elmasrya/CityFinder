@@ -8,6 +8,10 @@ public class City {
     String city, county, longitude, latitude;;
     int id;
 
+    public City () {
+
+    }
+
     public City(JSONObject cityObject) {
         try {
             city = cityObject.getString("name");
@@ -18,6 +22,26 @@ public class City {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCity() {
